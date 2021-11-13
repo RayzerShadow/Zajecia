@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function drives($x){
-      $drives = [
-        'ssd' => 'Dysk SSD',
-        'hdd' => 'Dysk HDD',
-        'fdd' => 'Dyskietka'
-      ];
-      return $drives[$x];
-    }
+  public function drives($drive){
+    $drives = [
+      'ssd' => 'Dysk SSD',
+      'hdd' => 'Dysk HDD',
+      'fdd' => 'Dyskietka'
+    ];
+    // return $drives[$drive];
+    dd($drives);
+  }
 }

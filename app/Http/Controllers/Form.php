@@ -4,27 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class form extends Controller
+class Form extends Controller
 {
     public function form(Request $req){
       switch ($req->input('gender')) {
         case 'm':
-          $gender='mężczyzna';
+          $gender='Mężczyzna';
           break;
         case 'w':
-          $gender='kobieta';
+          $gender='Kobieta';
           break;
         default:
           $gender='-';
           break;
       }
-      $email = $req->input('email');
-      $pass = $req->input('pass');
-      return form('form', [
-            'name' => $req->input('name'),
-            'gender' => $gender,
-            'email' => $email,
-            'pass' => $pass
-        ]);
+      $tab=[
+        'name'=>$req->input('name'),
+        'email'=>$req->input('email'),
+        'pass'=>$req->input('pass'),
+        'gender'=>$gender
+      ];
+      return view('form', $tab);
     }
 }

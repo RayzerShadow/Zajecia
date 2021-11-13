@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WsbSite;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserForm;
 use App\Http\Controllers\Form;
+use App\Http\Controllers\WsbController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,32 +25,32 @@ Route::get('/', function () {
 
 Route::get('/wsb', function(){
   // return view('wsb');
-  // return 'test';
+  // return 'wsb';
   // return ['name' => 'Janusz', 'surname' => 'Nowak'];
+
   return view('wsb', ['name' => 'Janusz', 'surname' => 'Nowak']);
 });
 
-Route::get('/pages/{x}', function ($x) {
-  $pages = [
+Route::get('/pages/{x}', function($x){
+  $pages= [
     'about' => 'Informacje o stronie',
-    'home' => 'Strona domowa',
-    'contact' => 'jan@o2.pl'
+    'contact' => 'janusz@wp.pl',
+    'home' => 'Strona domowa'
   ];
-
   return $pages[$x];
 });
 
-Route::get('/address/{city?}/{street?}/{zipCode?}', function (string $city="brak danych", string $street="-", int $zipCode=null) {
-  $zipCode=substr($zipCode, 0, 2)."-".substr($zipCode, 2, 3);
-  echo <<< L
-    Kod pocztowy: $zipCode miasto: $city<br>
-    Ulica: $street<br>
-    <hr>
-L;
+Route::get('/address/{city?}/{street?}/{zipCode?}', function (string  $city="brak danych", string $street="-", int $zipCode=null) {
+    $zipCode=substr($zipCode, 0, 2)."-".substr($zipCode, 2, 3);
+    echo <<< RESULT
+      Miasto: $city<br>
+      Ulica: $street<br>
+      Kod pocztowy: $zipCode
+RESULT;
 })->name('address');
 
-Route::redirect('adres', '/address');
-Route::redirect('/adres/{city?}/{street?}/{zipCode?}', '/address/{city?}/{street?}/{zipCode?}');
+Route::redirect('adres', 'address');
+Route::redirect('adres/{city?}/{street?}/{zipCode?}', '/address/{city?}/{street?}/{zipCode?}');
 
 Route::prefix('admin')->group(function(){
   Route::get('/home/{name}', function($name){
@@ -55,13 +58,26 @@ Route::prefix('admin')->group(function(){
   })->where(['name' => '[A-Za-z]+']);
 
   Route::get('/users', function(){
-    echo "<h3>Strona z użytkownikami</h3>";
+    echo "Użytkownicy";
   });
 });
 
-Route::get('/site/{x}', [App\Http\Controllers\WsbSite::class, 'index']);
+Route::redirect('/admin/{name}', '/admin/home/{name}');
+// Route::get('/site', [App\Http\Controllers\WsbSite::class, 'index']);
+Route::get('/site/{data}', [WsbSite::class, 'index']);
 Route::get('/drives/{drive}', [PageController::class, 'drives']);
+Route::post('UserForm', [UserForm::class, 'user']);
 Route::view('/userform', 'userform');
-// Route::get('UserController', [UserController::class, 'form']);
-Route::get('Form', [Form::class, 'form']);
-// test
+Route::post('Form', [Form::class, 'form']);
+
+// db
+Route::get('db', [WsbController::class, 'db']);
+Route::get('users', [UserController::class, 'db']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
