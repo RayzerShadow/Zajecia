@@ -6,10 +6,9 @@ use Illuminate\Http\Request;
 
 class WsbSite extends Controller
 {
-  public function index($x){
-    // return 'WSB Kontroler';
-    // return ['name' => 'Janusz', 'surname' => 'Nowak'];
-    $tab = ['name' => 'Janusz', 'surname' => 'Nowak'];
-    return $tab[$x];
-  }
+    public function index($key){
+      // return ['name' => 'Janusz', 'surname' => 'Nowak'];
+      $data = ['name' => 'Janusz', 'surname' => 'Nowak'];
+      return $data[$key];
+    }
 }
